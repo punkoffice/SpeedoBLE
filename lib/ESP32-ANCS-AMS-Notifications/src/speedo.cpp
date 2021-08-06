@@ -115,7 +115,7 @@ void Speedo::drawString(int x, int y, String text, alignment align) {
 
 void Speedo::disconnect() {
 	Serial.println("Forcing disconnection");
-	//client->disconnect();
+	client->disconnect();
 }
 
 void Speedo::draw() {

@@ -38,8 +38,11 @@ void onBLEStateChanged(BLENotifications::State state, const void *userData)
 
   case BLENotifications::StateDisconnected:
     Serial.println("StateDisconnected - disconnected from a phone or tablet");
-    //notifications.startAdvertising();
-    ESP.restart(); // not sure why advertising restart doesnt work
+    displayState.currentState = watchState::waiting;
+	mainSpeedo->init();
+	displayState.updateDisplay();
+	//notifications.startAdvertising();
+    //ESP.restart(); // not sure why advertising restart doesnt work
     break;
   }
   displayState.setConnected(state == BLENotifications::StateConnected);
