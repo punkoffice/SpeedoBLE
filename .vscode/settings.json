@@ -1,0 +1,8 @@
+{
+	"files.associations": {
+		"*.less": "less",
+		"xlocale": "cpp",
+		"xlocinfo": "cpp",
+		"xstring": "cpp"
+	}
+}
