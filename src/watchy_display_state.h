@@ -6,7 +6,7 @@
 #include <esp32notifications.h>
 #include <stdint.h>
 
-typedef enum watchState {waiting, speedo, notification};
+enum watchState {waiting, speedo, notification};
 
 class WatchyDisplayState {
 private:

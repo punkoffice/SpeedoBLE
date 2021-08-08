@@ -19,8 +19,6 @@
 #include "ble_notification.h"
 #include "watchy_display_state.h"
 
-static char LOG_TAG[] = "MAIN.INO";
-
 // typedef GxEPD2_BW<GxEPD2_154_D67, GxEPD2_154_D67::HEIGHT> display_t;
 display_t display(GxEPD2_154_D67(WATCHY_DISPLAY_CS_PIN, WATCHY_DISPLAY_DC_PIN, WATCHY_DISPLAY_RESET_PIN, WATCHY_DISPLAY_BUSY_PIN));
 BLENotifications notifications;
@@ -43,36 +41,6 @@ void onBLEStateChanged(BLENotifications::State state, const void *userData)
     break;
   }
   displayState.setConnected(state == BLENotifications::StateConnected);
-}
-
-static const char *ANCSEventIdNotificationToString(ANCS::event_id_t id)
-{
-  switch (id)
-  {
-  case ANCS::EventIDNotificationAdded:
-    return "NotificationAdded";
-  case ANCS::EventIDNotificationModified:
-    return "NotificationModified";
-  case ANCS::EventIDNotificationRemoved:
-    return "NotificationRemoved";
-  default:
-    return "NotificationAdded???";
-  }
-}
-static const char *ANCSEventFlagsToString(ANCS::EventFlags id)
-{
-  static std::string result = "EventFlags:";
-  if (id & ANCS::EventFlagSilent)
-    result += " Silent";
-  if (id & ANCS::EventFlagImportant)
-    result += " Important";
-  if (id & ANCS::EventFlagPreExisting)
-    result += " PreExisting";
-  if (id & ANCS::EventFlagPositiveAction)
-    result += " PositiveAction";
-  if (id & ANCS::EventFlagNegativeAction)
-    result += " NegativeAction";
-  return result.c_str();
 }
 
 void onNotificationArrived(const Notification *rawData, const void *userData) {
