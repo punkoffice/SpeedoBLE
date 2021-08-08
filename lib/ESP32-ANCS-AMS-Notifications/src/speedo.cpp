@@ -142,6 +142,10 @@ void Speedo::printMaxSpeed() {
 	drawString(194, 132, char_array, RIGHT);
 }
 
+void Speedo::resetMaxSpeed() {
+	maxSpeed = 0;
+}
+
 void Speedo::printTime() {
 	if (isTimeSet) {
 		time_t t = RTC.get();

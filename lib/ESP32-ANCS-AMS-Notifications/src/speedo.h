@@ -48,6 +48,7 @@ class Speedo {
 		void drawBattery(bool isWaiting);
 		void drawString(int x, int y, String text, alignment align);
 		void setup(BLEServer *pServer);
+		void resetMaxSpeed();
 		void disconnect();
 		void sleep();
 		void draw();

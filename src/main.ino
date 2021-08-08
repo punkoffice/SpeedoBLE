@@ -105,8 +105,13 @@ void setup() {
 void loop() {
 	uint8_t presses = buttonGetPressMask();
 	for (int i = 0; i < 4; i++)
-	if (buttonWasPressed(presses, i))
+	if (buttonWasPressed(presses, i)) {
 		ESP_LOGI(LOG_TAG, "Button %d press", i + 1);
+		if (i == 2) {
+			if (displayState.currentState == watchState::speedo)
+			mainSpeedo->resetMaxSpeed();
+		}
+	}
 	displayState.handleButtonPress(presses);
 	displayState.updateDisplay();
 	if (displayState.currentState == watchState::waiting) {
