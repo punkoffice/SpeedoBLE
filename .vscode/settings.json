@@ -3,6 +3,7 @@
 		"*.less": "less",
 		"xlocale": "cpp",
 		"xlocinfo": "cpp",
-		"xstring": "cpp"
+		"xstring": "cpp",
+		"motion.h": "c"
 	}
 }

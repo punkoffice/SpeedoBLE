@@ -52,12 +52,11 @@ void onNotificationRemoved(const Notification *rawData, const void *userData) {
 }
 
 void setup() {
-	mainSpeedo->display = &display;
+	mainSpeedo->display = &display;	
 
 	Serial.begin(115200);
 	Serial.println("Starting BLE work!");
 	notifications.begin(WATCHY_BLE_NAME);
-
 	notifications.setConnectionStateChangedCallback(onBLEStateChanged);
 	notifications.setNotificationCallback(onNotificationArrived);
 	notifications.setRemovedCallback(onNotificationRemoved);

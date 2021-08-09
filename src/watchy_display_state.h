@@ -3,6 +3,7 @@
 
 #include "watchy_hw.h"
 #include "button_interrupt.h"
+#include "motion.h"
 #include <esp32notifications.h>
 #include <stdint.h>
 
@@ -131,7 +132,17 @@ public:
 				drawScreenNoBLE();
 				break;
 			case watchState::speedo:
-				speedo->draw();
+				if (didShake()) {
+					if (ancsTitle.length() > 0) {
+						ANCSVibrate();
+						currentState = watchState::notification;
+						ancsShowTimeMS = millis() | 1;
+					} else {
+						speedo->draw();
+					}
+				} else {
+					speedo->draw();
+				}
 				break;
 			case watchState::notification:
 				drawScreenANCSNotification();
@@ -142,6 +153,9 @@ public:
 
 	WatchyDisplayState(display_t &display, BLENotifications &notifications) : display(display), notifications(notifications) {
 		speedo = Speedo::GetInstance();
+		ancsBody = "";
+		ancsTitle = "";
+		setupMotion();
 	};
   	~WatchyDisplayState(){};
 
@@ -159,8 +173,8 @@ public:
 		ancsUUID = 0;
 		ancsShowTimeMS = 0;
 		ancsFlags = (ANCS::EventFlags)0;
-		ancsBody = "";
-		ancsTitle = "";
+		//ancsBody = "";
+		//ancsTitle = "";
 		currentState = watchState::speedo;
 		// Need to get the screen updated fast because the buttons
 		// won't reflect the right action on screen until it does,
