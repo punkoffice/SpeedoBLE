@@ -165,6 +165,10 @@ void Speedo::resetMaxSpeed() {
 	maxSpeed = 0;
 }
 
+void Speedo::resetDistance() {
+	totalDistance = 0;
+}
+
 void Speedo::printTime() {
 	if (isTimeSet) {
 		time_t t = RTC.get();

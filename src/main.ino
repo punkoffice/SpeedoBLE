@@ -81,8 +81,11 @@ void loop() {
 					displayState.currentState = watchState::distance;
 				break;
 			case 2:
-				if (displayState.currentState == watchState::speedo)
+				if (displayState.currentState == watchState::speedo) {
 					mainSpeedo->resetMaxSpeed();
+				} else if (displayState.currentState == watchState::distance) {
+					mainSpeedo->resetDistance();
+				}
 				break;
 		}
 	}
