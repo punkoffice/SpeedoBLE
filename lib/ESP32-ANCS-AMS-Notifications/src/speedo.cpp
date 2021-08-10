@@ -64,7 +64,7 @@ class callbackSpeed: public BLECharacteristicCallbacks {
 			String strValue = value.c_str();
 			if (strValue.length() > 0) {
 				String strSpeed = getValue(strValue, ':', 0);
-				String strDistance = getValue(strValue, ':', 1);
+				String strDistance = getValue(strValue, ':', 1);				
 				int intValue = strSpeed.toInt();
 				if (intValue > maxSpeed) {
 					maxSpeed = intValue;
@@ -126,7 +126,8 @@ void Speedo::disconnect() {
 }
 
 void Speedo::showDistance() {
-	String strDistance = String(int(round(totalDistance)));
+	int totalDistanceKilometres = int(floor(totalDistance/1000.0));
+	String strDistance = String(totalDistanceKilometres);
 	display->fillScreen(GxEPD_WHITE);
 	display->setTextColor(GxEPD_BLACK);
 	display->setFont(&FreeSansBold9pt7b);
