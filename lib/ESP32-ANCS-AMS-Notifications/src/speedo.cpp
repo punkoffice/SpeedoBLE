@@ -36,6 +36,7 @@ Speedo *Speedo::GetInstance() {
 }
 
 int currentSpeed = 0;
+double totalDistance = 0.0;
 int maxSpeed = 0;
 bool isTimeSet = false;
 DS3232RTC RTC; 
@@ -60,11 +61,16 @@ class callbackSpeed: public BLECharacteristicCallbacks {
 		std::string value = pCharacteristic->getValue();
 		if (value.length() > 0) {
 			String strValue = value.c_str();
-			int intValue = strValue.toInt();
-			if (intValue > maxSpeed) {
-				maxSpeed = intValue;
+			if (strValue.length() > 0) {
+				String strSpeed = getValue(strValue, ':', 0);
+				String strDistance = getValue(strValue, ':', 1);
+				int intValue = strSpeed.toInt();
+				if (intValue > maxSpeed) {
+					maxSpeed = intValue;
+				}
+				currentSpeed = intValue;
+				totalDistance += strDistance.toDouble();
 			}
-			currentSpeed = intValue;
 		}
     }
 };
