@@ -190,6 +190,13 @@ public:
 	void startDistanceTimer() {
 		distanceShowTimeMS = millis() | 1;
 	}
+
+	void endDistanceTimer() {
+		uint32_t now = millis();
+		if ((now - distanceShowTimeMS) > DISTANCE_OFF_DELAY_MS) {
+			currentState = watchState::speedo;
+		}
+	}
 	
 	void setANCSNotification(const Notification *notification) {
     	if ((notification->eventFlags & (ANCS::EventFlagPreExisting | ANCS::EventFlagSilent)) != 0)
@@ -221,7 +228,7 @@ public:
 	void checkDistanceTimeout() {
 		if (currentState != watchState::distance) return;
 		uint32_t now = millis();
-		if ((now - distanceShowTimeMS) > DISTANCE_NOTIFICATION_DELAY_MS || (now < ancsShowTimeMS))
+		if ((now - distanceShowTimeMS) > DISTANCE_NOTIFICATION_DELAY_MS || (now < distanceShowTimeMS))
 			currentState = watchState::speedo;
 	}
 

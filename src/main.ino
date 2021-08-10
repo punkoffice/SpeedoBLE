@@ -76,9 +76,12 @@ void loop() {
 		ESP_LOGI(LOG_TAG, "Button %d press", i + 1);
 		switch(i) {
 			case 1:
-				if (displayState.currentState == watchState::speedo)
+				if (displayState.currentState == watchState::speedo) {
 					displayState.startDistanceTimer();
 					displayState.currentState = watchState::distance;
+				} else if (displayState.currentState == watchState::distance) {
+					displayState.endDistanceTimer();
+				}
 				break;
 			case 2:
 				if (displayState.currentState == watchState::speedo) {
