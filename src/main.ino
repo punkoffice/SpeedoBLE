@@ -74,9 +74,16 @@ void loop() {
 	for (int i = 0; i < 4; i++)
 	if (buttonWasPressed(presses, i)) {
 		ESP_LOGI(LOG_TAG, "Button %d press", i + 1);
-		if (i == 2) {
-			if (displayState.currentState == watchState::speedo)
-			mainSpeedo->resetMaxSpeed();
+		switch(i) {
+			case 1:
+				if (displayState.currentState == watchState::speedo)
+					displayState.startDistanceTimer();
+					displayState.currentState = watchState::distance;
+				break;
+			case 2:
+				if (displayState.currentState == watchState::speedo)
+					mainSpeedo->resetMaxSpeed();
+				break;
 		}
 	}
 	displayState.handleButtonPress(presses);

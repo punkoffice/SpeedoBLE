@@ -15,6 +15,9 @@
 #define WATCHY_BLE_NAME "Watchy Speedo"
 // Max time to show a notification before returning to AMS screen
 #define ANCS_NOTIFICATION_DELAY_MS 10000
+
+#define DISTANCE_NOTIFICATION_DELAY_MS 10000
+
 // Delay before screen updates
 #define SCREEN_UPDATE_DEBOUNCE_PERIOD_MS 200
 #define CTS_UPDATE_PERIOD_MS 29000

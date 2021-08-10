@@ -51,7 +51,8 @@ class Speedo {
 		void resetMaxSpeed();
 		void disconnect();
 		void sleep();
-		void draw();
+		void showSpeed();
+		void showDistance();
 		void init();
 		int tick = 0;
 		bool alreadyPaired = false;

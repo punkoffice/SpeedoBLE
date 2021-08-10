@@ -1,6 +1,7 @@
 #include "speedo.h"
 #include "fonts/Montserrat_Bold_45.h"
 #include "fonts/DSEG7_Classic_Bold_25.h"
+#include <Fonts/FreeSansBold9pt7b.h>
 #include <BLECharacteristic.h>
 #include <BLEDevice.h>
 #include <DS3232RTC.h>
@@ -124,7 +125,16 @@ void Speedo::disconnect() {
 	//client->disconnect();
 }
 
-void Speedo::draw() {
+void Speedo::showDistance() {
+	display->fillScreen(GxEPD_WHITE);
+	display->setTextColor(GxEPD_BLACK);
+	display->setFont(&FreeSansBold9pt7b);
+	display->setCursor(55, 20);
+	display->print("Distance:");
+	display->display(true);
+}
+
+void Speedo::showSpeed() {
 	String strCurrentSpeed = String(currentSpeed);
 	int n = strCurrentSpeed.length();  
 	char char_array[n + 1];

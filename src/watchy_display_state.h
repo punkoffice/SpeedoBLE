@@ -7,7 +7,7 @@
 #include <esp32notifications.h>
 #include <stdint.h>
 
-enum watchState {waiting, speedo, notification};
+enum watchState {waiting, speedo, distance, notification};
 
 class WatchyDisplayState {
 private:
@@ -34,6 +34,7 @@ private:
 	ANCS::EventFlags ancsFlags = (ANCS::EventFlags)0;
 	bool isShowingANCSNotification() { return ancsShowTimeMS != 0; }
 
+	uint32_t distanceShowTimeMS = 0;
 private:
 	#define ALIGN_NEAR 0
 	#define ALIGN_MIDDLE 1
@@ -138,15 +139,19 @@ public:
 						currentState = watchState::notification;
 						ancsShowTimeMS = millis() | 1;
 					} else {
-						speedo->draw();
+						speedo->showSpeed();
 					}
 				} else {
-					speedo->draw();
+					speedo->showSpeed();
 				}
 				break;
 			case watchState::notification:
 				drawScreenANCSNotification();
 				checkANCSNotificationTimeout();
+				break;
+			case watchState::distance:
+				speedo->showDistance();
+				checkDistanceTimeout();
 				break;
 		}
 	};
@@ -173,8 +178,6 @@ public:
 		ancsUUID = 0;
 		ancsShowTimeMS = 0;
 		ancsFlags = (ANCS::EventFlags)0;
-		//ancsBody = "";
-		//ancsTitle = "";
 		currentState = watchState::speedo;
 		// Need to get the screen updated fast because the buttons
 		// won't reflect the right action on screen until it does,
@@ -184,6 +187,10 @@ public:
 
 	void clearANCSNotification() { clearANCSNotification(ancsUUID); }
 
+	void startDistanceTimer() {
+		distanceShowTimeMS = millis() | 1;
+	}
+	
 	void setANCSNotification(const Notification *notification) {
     	if ((notification->eventFlags & (ANCS::EventFlagPreExisting | ANCS::EventFlagSilent)) != 0)
     		return;
@@ -208,7 +215,14 @@ public:
 		return;
 		uint32_t now = millis();
 		if ((now - ancsShowTimeMS) > ANCS_NOTIFICATION_DELAY_MS || (now < ancsShowTimeMS))
-		clearANCSNotification();
+			clearANCSNotification();
+	}
+
+	void checkDistanceTimeout() {
+		if (currentState != watchState::distance) return;
+		uint32_t now = millis();
+		if ((now - distanceShowTimeMS) > DISTANCE_NOTIFICATION_DELAY_MS || (now < ancsShowTimeMS))
+			currentState = watchState::speedo;
 	}
 
 	void updateIfNeeded() {
