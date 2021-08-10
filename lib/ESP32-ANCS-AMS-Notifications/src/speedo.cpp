@@ -126,11 +126,14 @@ void Speedo::disconnect() {
 }
 
 void Speedo::showDistance() {
+	String strDistance = String(int(round(totalDistance)));
 	display->fillScreen(GxEPD_WHITE);
 	display->setTextColor(GxEPD_BLACK);
 	display->setFont(&FreeSansBold9pt7b);
 	display->setCursor(55, 20);
 	display->print("Distance:");
+	display->setFont(&Montserrat_Bold72pt7b);
+	drawString(DISPLAY_WIDTH/2, 50, strDistance, CENTER);
 	display->display(true);
 }
 
