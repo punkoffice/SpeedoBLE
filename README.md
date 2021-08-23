@@ -1,4 +1,4 @@
-# SpeedoBLE
+# SpeedoBLE for the Watchy smartphone
 
 ## To Do
 
