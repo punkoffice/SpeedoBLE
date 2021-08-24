@@ -1,6 +1,6 @@
 # SpeedoBLE for the Watchy smartphone
 
-This needs an app to provide data to it.  Currently it only works with this iOS app https://github.com/kewlbear/Open3D-iOS
+This needs an app to provide data to it.  Currently it only works with this iOS app https://github.com/punkoffice/SpeedoBLE-iOS
 Make sure Watchy is in "waiting" state before running the iOS app.  If Watchy is "sleeping" state, press any of the buttons to wake it up.
 
 ## To Do
