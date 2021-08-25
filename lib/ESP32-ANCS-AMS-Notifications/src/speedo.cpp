@@ -122,6 +122,8 @@ void Speedo::drawString(int x, int y, String text, alignment align) {
 
 void Speedo::disconnect() {
 	Serial.println("Forcing disconnection");
+	currentSpeed = -1;
+	showSpeed();
 	//client->disconnect();
 }
 
@@ -139,14 +141,20 @@ void Speedo::showDistance() {
 }
 
 void Speedo::showSpeed() {
-	String strCurrentSpeed = String(currentSpeed);
-	int n = strCurrentSpeed.length();  
-	char char_array[n + 1];
-	strcpy(char_array, strCurrentSpeed.c_str());
+	String strCurrentSpeed;
 	display->fillScreen(GxEPD_WHITE);
 	display->setTextColor(GxEPD_BLACK);
-	display->setFont(&Montserrat_Bold72pt7b);
-	drawString(DISPLAY_WIDTH/2, 10, char_array, CENTER);
+	if (currentSpeed > -1) {
+		strCurrentSpeed = String(currentSpeed);
+		int n = strCurrentSpeed.length();  
+		char char_array[n + 1];
+		strcpy(char_array, strCurrentSpeed.c_str());
+		display->setFont(&Montserrat_Bold72pt7b);
+		drawString(DISPLAY_WIDTH/2, 10, char_array, CENTER);
+	} else {
+		display->setFont(&FreeSansBold12pt7b);
+		drawString(DISPLAY_WIDTH/2, 50, "Disconnected", CENTER);
+	}
 	printMaxSpeed();
 	printTime();
 	drawBattery(false);
