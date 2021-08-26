@@ -16,10 +16,12 @@ private:
 	Speedo *speedo;
 	bool firstDisplay = true;
 	uint32_t needsUpdate = 1;
+
 	void invalidate() {
-	if (!needsUpdate)
-		needsUpdate = millis();
+		if (!needsUpdate)
+			needsUpdate = millis();
 	}
+	
 	void invalidateImmediate() {
 		needsUpdate = millis() - SCREEN_UPDATE_DEBOUNCE_PERIOD_MS - 1;
 	}
@@ -160,13 +162,14 @@ public:
 		speedo = Speedo::GetInstance();
 		ancsBody = "";
 		ancsTitle = "";
-		setupMotion();
+		//setupMotion();
 	};
   	~WatchyDisplayState(){};
 
 	void setConnected(const bool isConnected) {
 		if (bleConnected == isConnected)
 		return;
+		setupMotion();
 		currentState = watchState::speedo;
 		bleConnected = isConnected;
 		invalidate();

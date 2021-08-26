@@ -3,8 +3,13 @@
 #include "bma.h"
 
 #define MOTION_TRIGGER 1200
+#define SHAKE_DISTANCE 500
 
 RTC_DATA_ATTR BMA423 sensor;
+
+uint16_t wristFlipCount = 0;
+int16_t previousAccZ;
+bool isSetup = false;
 
 uint16_t _readRegister(uint8_t address, uint8_t reg, uint8_t *data, uint16_t len)
 {
@@ -28,6 +33,7 @@ uint16_t _writeRegister(uint8_t address, uint8_t reg, uint8_t *data, uint16_t le
 }
 
 void setupMotion() {
+	if (isSetup) return;
 	if (sensor.begin(_readRegister, _writeRegister, delay) == false) {
 		//fail to init BMA
 		return;
@@ -46,7 +52,7 @@ void setupMotion() {
 	// Enable BMA423 accelerometer
 	// Warning : Need to use feature, you must first enable the accelerometer
 	sensor.enableAccel();
-
+	isSetup = true;
 	struct bma4_int_pin_config config ;
 	config.edge_ctrl = BMA4_LEVEL_TRIGGER;
 	config.lvl = BMA4_ACTIVE_HIGH;
@@ -63,33 +69,40 @@ void setupMotion() {
 	remap_data.y_axis_sign = 0xFF;
 	remap_data.z_axis = 2;
 	remap_data.z_axis_sign = 0xFF;
+
 	// Need to raise the wrist function, need to set the correct axis
 	sensor.setRemapAxes(&remap_data);
-
-	// Enable BMA423 isStepCounter feature
-	sensor.enableFeature(BMA423_STEP_CNTR, true);
-	// Enable BMA423 isTilt feature
-	sensor.enableFeature(BMA423_TILT, true);
-	// Enable BMA423 isDoubleClick feature
-	sensor.enableFeature(BMA423_WAKEUP, true);
-
-	// Reset steps
-	sensor.resetStepCounter();
-
-	// Turn on feature interrupt
-	sensor.enableStepCountInterrupt();
-	sensor.enableTiltInterrupt();
-	// It corresponds to isDoubleClick interrupt
-	sensor.enableWakeupInterrupt();  
+	Accel acc;
+	bool res = sensor.getAccel(acc);
+	if (!res) {
+		previousAccZ = acc.z;
+	}
 }
 
 bool didShake() {
 	Accel acc;
 	bool res = sensor.getAccel(acc);
+	bool didShake;
 	if (!res) {
 		Serial.println("getAccel FAIL");
 		return false;
 	} else {
-		return ((abs(acc.x) > MOTION_TRIGGER) || (abs(acc.y) > MOTION_TRIGGER));
+		int16_t currentAccZ = acc.z;
+		didShake = false;
+		int16_t diff = abs(currentAccZ - previousAccZ);
+		switch(wristFlipCount) {
+			case 0:
+				if (diff > SHAKE_DISTANCE) wristFlipCount++;
+				break;
+			case 1:
+				if ((currentAccZ < 0) && (diff > SHAKE_DISTANCE)) {
+					wristFlipCount++;
+					didShake = true;
+				}
+				wristFlipCount = 0;				
+				break;
+		}
+		previousAccZ = currentAccZ;
+		return (didShake);
 	}
 }
