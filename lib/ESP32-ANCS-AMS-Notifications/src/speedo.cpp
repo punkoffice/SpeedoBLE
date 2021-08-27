@@ -8,6 +8,7 @@
 
 #define YEAR_OFFSET 1970
 #define MUTEX_WAIT 50
+#define VIB_MOTOR_PIN 13
 
 // battery
 const uint8_t BATTERY_SEGMENT_WIDTH = 7;
@@ -56,6 +57,15 @@ String getValue(String data, char separator, int index) {
 	}
 	return found>index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
+
+class callbackAlarm: public BLECharacteristicCallbacks {
+    void onWrite(BLECharacteristic *pCharacteristic) {
+		pinMode(VIB_MOTOR_PIN, OUTPUT);
+		digitalWrite(VIB_MOTOR_PIN, true);
+		delay(1000);
+		digitalWrite(VIB_MOTOR_PIN, false);
+	}
+};
 
 class callbackSpeed: public BLECharacteristicCallbacks {
     void onWrite(BLECharacteristic *pCharacteristic) {
@@ -245,6 +255,13 @@ void Speedo::setup(BLEServer *pServer) {
 											BLECharacteristic::PROPERTY_WRITE
 										);										
 	pCharacteristicTime->setCallbacks(new callbackTime());
+
+	BLECharacteristic *pCharacteristicAlarm = pService->createCharacteristic(
+											SpeedoCharacteristic_Alarm_UUID,
+											BLECharacteristic::PROPERTY_WRITE
+										);										
+	pCharacteristicAlarm->setCallbacks(new callbackAlarm());
+
 	pService->start();
 }
 

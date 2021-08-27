@@ -31,6 +31,7 @@
 #define SpeedoService_UUID        			"4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define SpeedoCharacteristic_Speed_UUID 	"beb5483e-36e1-4688-b7f5-ea07361b26a8"
 #define SpeedoCharacteristic_Time_UUID 		"ad0794ba-f0dc-11eb-9a03-0242ac130003"
+#define SpeedoCharacteristic_Alarm_UUID		"dc4f89af-c7d6-48b3-b713-43b4e835c965"
 
 enum alignment {LEFT, RIGHT, CENTER};
 
