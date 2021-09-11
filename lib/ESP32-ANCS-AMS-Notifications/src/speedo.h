@@ -8,6 +8,7 @@
 #include <GxEPD2_BW.h>
 #include <Fonts/FreeSansBold12pt7b.h>
 #include "fonts/Montserrat_Bold_72.h"
+#include "fonts/Montserrat_Bold_50.h"
 
 //pins
 #define PIN_TOP_RIGHT 32

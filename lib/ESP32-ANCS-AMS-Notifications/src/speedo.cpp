@@ -38,7 +38,7 @@ Speedo *Speedo::GetInstance() {
 }
 
 int currentSpeed = 0;
-double totalDistance = 0.0;
+int totalDistance = 0;
 int maxSpeed = 0;
 bool isTimeSet = false;
 DS3232RTC RTC; 
@@ -80,7 +80,7 @@ class callbackSpeed: public BLECharacteristicCallbacks {
 					maxSpeed = intValue;
 				}
 				currentSpeed = intValue;
-				totalDistance += strDistance.toDouble();
+				totalDistance += strDistance.toInt();
 			}
 		}
     }
@@ -138,15 +138,15 @@ void Speedo::disconnect() {
 }
 
 void Speedo::showDistance() {
-	int totalDistanceKilometres = int(floor(totalDistance/1000.0));
-	String strDistance = String(totalDistanceKilometres);
+	double totalDistanceKilometres = totalDistance/1000.0;
+	String strDistance = String(totalDistanceKilometres, 1);
 	display->fillScreen(GxEPD_WHITE);
 	display->setTextColor(GxEPD_BLACK);
 	display->setFont(&FreeSansBold9pt7b);
-	display->setCursor(55, 20);
+	display->setCursor(55, 35);
 	display->print("Distance:");
-	display->setFont(&Montserrat_Bold72pt7b);
-	drawString(DISPLAY_WIDTH/2, 50, strDistance, CENTER);
+	display->setFont(&Montserrat_Bold50pt7b);
+	drawString(DISPLAY_WIDTH/2, 65, strDistance, CENTER);
 	display->display(true);
 }
 
